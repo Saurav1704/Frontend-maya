@@ -1,0 +1,8 @@
+{
+  "name": "Create Maya",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite",
+  "id": "7976f957"
+}

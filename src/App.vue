@@ -26,6 +26,7 @@
         </ion-content>
       </ion-menu>
       <ion-router-outlet id="main-content"></ion-router-outlet>
+      
     </ion-split-pane>
   </ion-app>
 </template>
@@ -37,6 +38,7 @@ import {
   IonIcon,
   IonItem,
   IonLabel,
+
   IonList,
   IonListHeader,
   IonMenu,
@@ -44,6 +46,7 @@ import {
   IonNote,
   IonRouterOutlet,
   IonSplitPane,
+
 } from '@ionic/vue';
 import { ref } from 'vue';
 import {
@@ -62,6 +65,8 @@ import {
   warningOutline,
   warningSharp,
 } from 'ionicons/icons';
+
+
 
 const selectedIndex = ref(0);
 const appPages = [
@@ -103,6 +108,7 @@ const appPages = [
   },
 ];
 const labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
+
 
 const path = window.location.pathname.split('folder/')[1];
 if (path !== undefined) {
@@ -230,4 +236,5 @@ ion-note {
 ion-item.selected {
   --color: var(--ion-color-primary);
 }
+
 </style>

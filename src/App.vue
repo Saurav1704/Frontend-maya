@@ -4,8 +4,8 @@
       <ion-menu content-id="main-content" type="overlay">
         <ion-content>
           <ion-list id="inbox-list">
-            <ion-list-header>Inbox</ion-list-header>
-            <ion-note>hi@ionicframework.com</ion-note>
+            <ion-list-header>MAYA</ion-list-header>
+            <ion-note>Maya123@soprasteria.com</ion-note>
 
             <ion-menu-toggle :auto-hide="false" v-for="(p, i) in appPages" :key="i">
               <ion-item @click="selectedIndex = i" router-direction="root" :router-link="p.url" lines="none" :detail="false" class="hydrated" :class="{ selected: selectedIndex === i }">
@@ -15,14 +15,16 @@
             </ion-menu-toggle>
           </ion-list>
 
-          <ion-list id="labels-list">
+          <ion-img src="@/assets/sopra-steria.png" class="menu-logo"></ion-img>
+
+          <!-- <ion-list id="labels-list">
             <ion-list-header>Labels</ion-list-header>
 
             <ion-item v-for="(label, index) in labels" lines="none" :key="index">
               <ion-icon aria-hidden="true" slot="start" :ios="bookmarkOutline" :md="bookmarkSharp"></ion-icon>
               <ion-label>{{ label }}</ion-label>
             </ion-item>
-          </ion-list>
+          </ion-list> -->
         </ion-content>
       </ion-menu>
       <ion-router-outlet id="main-content"></ion-router-outlet>
@@ -38,7 +40,7 @@ import {
   IonIcon,
   IonItem,
   IonLabel,
-
+  IonImg,
   IonList,
   IonListHeader,
   IonMenu,
@@ -64,50 +66,38 @@ import {
   trashSharp,
   warningOutline,
   warningSharp,
+  constructOutline,      // Added for Bill of Material
+  constructSharp,        // Added for Bill of Material
+  documentTextOutline,   // Added for Purchase Order
+  documentTextSharp,     // Added for Purchase Order
+  serverOutline,         // Added for General Database
+  serverSharp,           // Added for General Database
 } from 'ionicons/icons';
-
 
 
 const selectedIndex = ref(0);
 const appPages = [
-  {
-    title: 'Inbox',
+{
+    title: 'Bill of Material',
     url: '/folder/Inbox',
-    iosIcon: mailOutline,
-    mdIcon: mailSharp,
+    iosIcon: constructOutline,  // Changed icon
+    mdIcon: constructSharp,     // Changed icon
   },
   {
-    title: 'Outbox',
+    title: 'Purchase Order',
     url: '/folder/Outbox',
-    iosIcon: paperPlaneOutline,
-    mdIcon: paperPlaneSharp,
+    iosIcon: documentTextOutline, // Changed icon
+    mdIcon: documentTextSharp,    // Changed icon
   },
   {
-    title: 'Favorites',
+    title: 'General Database',
     url: '/folder/Favorites',
-    iosIcon: heartOutline,
-    mdIcon: heartSharp,
+    iosIcon: serverOutline,  // Changed icon
+    mdIcon: serverSharp,     // Changed icon
   },
-  {
-    title: 'Archived',
-    url: '/folder/Archived',
-    iosIcon: archiveOutline,
-    mdIcon: archiveSharp,
-  },
-  {
-    title: 'Trash',
-    url: '/folder/Trash',
-    iosIcon: trashOutline,
-    mdIcon: trashSharp,
-  },
-  {
-    title: 'Spam',
-    url: '/folder/Spam',
-    iosIcon: warningOutline,
-    mdIcon: warningSharp,
-  },
+  
 ];
-const labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
+// const labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
 
 
 const path = window.location.pathname.split('folder/')[1];
@@ -235,6 +225,13 @@ ion-note {
 
 ion-item.selected {
   --color: var(--ion-color-primary);
+}
+ion-img.menu-logo {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  width: 100px;
+  height: auto;
 }
 
 </style>

@@ -7,12 +7,17 @@
         </ion-buttons>
         <ion-title>
           <img src="@/assets/logo.svg" alt="Maya Logo" class="logo" />
-          Maya</ion-title>
+          Maya
+        </ion-title>
       </ion-toolbar>
     </ion-header>
 
     <ion-content>
-      <div v-for="(message, index) in messages" :key="index" :class="message.role">
+      <div
+        v-for="(message, index) in messages"
+        :key="index"
+        :class="['message', message.role]"
+      >
         <p>{{ message.content }}</p>
       </div>
     </ion-content>
@@ -26,88 +31,94 @@
             @keyup.enter="sendMessage"
             clear-input
           ></ion-input>
-          <!-- <img src="@/assets/sopra-steria.png" alt="Maya Logo" class="bottom-logo" /> -->
-          <ion-button @click="sendMessage">Send</ion-button>
+                    <!-- Change button to an icon button -->
+            <ion-button @click="sendMessage" fill="clear">
+            <ion-icon slot="icon-only" name="send-outline"></ion-icon>
+          </ion-button>
         </ion-item>
       </ion-toolbar>
     </ion-footer>
-  </ion-page>
+  </ion-page> 
 </template>
 
 <script>
-import { CapacitorHttp } from '@capacitor/core'; // Import CapacitorHttp
-import { IonButton, IonFooter, IonInput, IonPage, IonTitle, IonImg } from '@ionic/vue';
+import { CapacitorHttp } from '@capacitor/core';
+import { IonButton, IonFooter, IonInput, IonPage, IonTitle, IonImg, IonIcon } from '@ionic/vue';
 
 export default {
   components: {
-    IonButton, IonFooter, IonInput, IonPage, IonTitle, IonImg
-
+    IonButton, IonFooter, IonInput, IonPage, IonTitle, IonImg, IonIcon
   },
   data() {
     return {
        messages: [],
-       message: '', // User input message
+       message: '',
     };
   },
   methods: {
-     async sendMessage() {
-      const question = this.message.trim(); // Trim whitespace from input
-      console.log('User Message:', question); // Debugging log to check the input value
-
-      // // Check if the input is empty
-       if (!question) {
+    async sendMessage() {
+      const question = this.message.trim();
+      if (!question) {
          this.messages.push({ role: 'assistant', content: 'Question is empty.' });
          return;
-       }
+      }
 
-      // Add the user's message to the chat
       this.messages.push({ role: 'user', content: question });
-
-     // Clear the input after sending the message
       this.message = '';
 
       try {
-        // Send the input to the backend API
         const response = await CapacitorHttp.post({
-          url: 'http://localhost:5000/api/generate-response', // Ensure this matches your backend URL
+          url: 'http://localhost:5000/api/generate-response',
           headers: { 'Content-Type': 'application/json' },
-          data: { question: question }, // Sending question as payload
+          data: { question: question },
         });
-
-        // Check the response from the backend
-        console.log('Response:', response); // Log the response to check its format
         const data = response.data;
-
-        // Add the response from the backend to the chat
         this.messages.push({ role: 'assistant', content: data.response || 'No response received.' });
       } catch (error) {
-        console.log('Error sending request:', error); // Log any errors encountered
         this.messages.push({ role: 'assistant', content: `Error: ${error.message}` });
       }
-
-
     },
   },
 };
 </script>
 
 <style scoped>
+.message {
+  display: inline-block; /* Allows dynamic width based on content */
+  max-width: 75%; /* Maximum width of the message bubble */
+  padding: 8px 12px; /* Padding inside the message bubble */
+  border-radius: 15px; /* Rounded corners for the message bubble */
+  margin: 10px ; /* Spacing between messages */
+  word-wrap: break-word; /* Ensures long words break inside the box */
+  word-break: break-word; /* Ensures long words break and do not overflow */
+  white-space: pre-wrap; /* Preserves spaces and line breaks */
+  clear: both; /* Clears float to avoid overlapping */
+}
+
+/* User message styles */
 .user {
-  text-align: right;
-  margin: 10px;
+  background-color: #0b93f6; /* Blue background for user messages */
+  color: white; /* White text for user messages */
+  float: right; /* Aligns the user message to the right */
+  text-align: left; /* Align text to the left inside the bubble */
 }
 
+/* Assistant message styles */
 .assistant {
-  text-align: left;
-  margin: 10px;
+  background-color: #e5e5ea; /* Light gray background for assistant messages */
+  color: black; /* Black text for assistant messages */
+  float: left; /* Aligns the assistant message to the left */
+  text-align: left; /* Align text to the left inside the bubble */
 }
 
-/* Make sure the content doesn't overlap with the footer */
 ion-content {
-  --padding-bottom: 70px;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  --padding-bottom: 70px; /* Prevents content from overlapping with footer */
+  overflow-y: auto; /* Enables scrolling for long content */
 }
 
-/* Ensure the footer is always at the bottom */
 ion-footer {
   position: fixed;
   bottom: 0;
@@ -115,12 +126,19 @@ ion-footer {
   right: 0;
 }
 
-/* Logo styles */
 .logo {
-  height: 30px; /* Adjust size as needed */
-  margin-right: 8px; /* Space between logo and title */
-  vertical-align: middle; /* Aligns logo vertically */
+  height: 30px;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+ion-button {
+  padding: 0; /* Removes extra padding */
+  margin: 0 10px; /* Adds a little margin */
+}
+
+ion-icon {
+  font-size: 24px; /* Adjust the size of the send icon */
+  color: #0b93f6; /* WhatsApp-like blue color */
 }
 
 </style>
-

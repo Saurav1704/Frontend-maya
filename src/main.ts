@@ -3,6 +3,8 @@ import App from './App.vue'
 import router from './router';
 
 import { IonicVue } from '@ionic/vue';
+import { addIcons } from 'ionicons';
+import { sendOutline } from 'ionicons/icons'; // Import the icon
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/vue/css/core.css';
@@ -33,6 +35,10 @@ import '@ionic/vue/css/palettes/dark.system.css';
 
 /* Theme variables */
 import './theme/variables.css';
+
+addIcons({
+  'send-outline': sendOutline // Register the icon explicitly
+});
 
 const app = createApp(App)
   .use(IonicVue)

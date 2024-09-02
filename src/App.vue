@@ -4,8 +4,10 @@
       <ion-menu content-id="main-content" type="overlay">
         <ion-content>
           <ion-list id="inbox-list">
+            <ion-img :src="mayaLogo" alt="Maya" class="menu-maya-logo"></ion-img>
             <ion-list-header>MAYA</ion-list-header>
-            <ion-note>Maya123@soprasteria.com</ion-note>
+            
+            <ion-note></ion-note>
 
             <ion-menu-toggle :auto-hide="false" v-for="(p, i) in appPages" :key="i">
               <ion-item @click="selectedIndex = i" router-direction="root" :router-link="p.url" lines="none" :detail="false" class="hydrated" :class="{ selected: selectedIndex === i }">
@@ -15,7 +17,8 @@
             </ion-menu-toggle>
           </ion-list>
 
-          <ion-img src="@/assets/sopra-steria.png" class="menu-logo"></ion-img>
+          <ion-img :src="ssgLogo" alt="Sopra Steria" class="menu-logo"></ion-img>
+          
 
           <!-- <ion-list id="labels-list">
             <ion-list-header>Labels</ion-list-header>
@@ -51,27 +54,13 @@ import {
 
 } from '@ionic/vue';
 import { ref } from 'vue';
+import ssgLogo from '@/assets/sopra-steria.png';
+import Introduction from './component/Introduction.vue';
+import mayaLogo from '@/assets/maya-logo.png';
 import {
-  archiveOutline,
-  archiveSharp,
-  bookmarkOutline,
-  bookmarkSharp,
-  heartOutline,
-  heartSharp,
-  mailOutline,
-  mailSharp,
-  paperPlaneOutline,
-  paperPlaneSharp,
-  trashOutline,
-  trashSharp,
-  warningOutline,
-  warningSharp,
-  constructOutline,      // Added for Bill of Material
-  constructSharp,        // Added for Bill of Material
-  documentTextOutline,   // Added for Purchase Order
-  documentTextSharp,     // Added for Purchase Order
-  serverOutline,         // Added for General Database
-  serverSharp,           // Added for General Database
+  codeWorkingOutline,
+  serverOutline,         
+  serverSharp,           
 } from 'ionicons/icons';
 
 
@@ -79,19 +68,19 @@ const selectedIndex = ref(0);
 const appPages = [
 {
     title: 'Bill of Material',
-    url: '/folder/Inbox',
-    iosIcon: constructOutline,  // Changed icon
-    mdIcon: constructSharp,     // Changed icon
+    url: '/Main/Bill of Material',
+    iosIcon: codeWorkingOutline,  // Changed icon
+    mdIcon: codeWorkingOutline,     // Changed icon
   },
   {
     title: 'Purchase Order',
-    url: '/folder/Outbox',
-    iosIcon: documentTextOutline, // Changed icon
-    mdIcon: documentTextSharp,    // Changed icon
+    url: '/Main/Purchase Order',
+    iosIcon: codeWorkingOutline, // Changed icon
+    mdIcon: codeWorkingOutline,    // Changed icon
   },
   {
     title: 'General Database',
-    url: '/folder/Favorites',
+    url: '/Main/General Database',
     iosIcon: serverOutline,  // Changed icon
     mdIcon: serverSharp,     // Changed icon
   },
@@ -100,7 +89,7 @@ const appPages = [
 // const labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
 
 
-const path = window.location.pathname.split('folder/')[1];
+const path = window.location.pathname.split('Main/')[1];
 if (path !== undefined) {
   selectedIndex.value = appPages.findIndex((page) => page.title.toLowerCase() === path.toLowerCase());
 }
@@ -138,7 +127,7 @@ ion-menu.md ion-list#inbox-list {
 ion-menu.md ion-list#inbox-list ion-list-header {
   font-size: 22px;
   font-weight: 600;
-
+  margin-left: 50px;
   min-height: 20px;
 }
 
@@ -232,6 +221,13 @@ ion-img.menu-logo {
   left: 10px;
   width: 100px;
   height: auto;
+}
+ion-img.menu-maya-logo {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 40px;
+  height: 40px;
 }
 
 </style>

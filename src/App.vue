@@ -26,7 +26,7 @@
   </ion-app>
 </template>
  
-<script setup lang="ts">
+<script>
 import {
   IonApp,
   IonContent,
@@ -41,50 +41,77 @@ import {
   IonRouterOutlet,
   IonSplitPane,
 } from '@ionic/vue';
-import { ref } from 'vue';
-import ssgLogo from '@/assets/sopra-steria.png';
-import mayaLogo from '@/assets/maya-logo.png';
+import { StatusBar } from '@capacitor/status-bar';
+import SsgLogo from '@/assets/sopra-steria.png';
+import MayaLogo from '@/assets/maya-logo.png';
+import { App } from '@capacitor/app';
 import {
   chatbubbles,
   cloudy,          
-} from 'ionicons/icons';
- 
-const selectedIndex = ref(0);
-const appPages = [
-{
-    title: 'Bill of Material',
-    url: '/Main/Bill of Material',
-    iosIcon: cloudy,
-    mdIcon: cloudy,    
-    filename: 'prompt_bom.txt',
+} from 'ionicons/icons'; 
+export default{
+  components: {
+    IonApp, IonContent, IonIcon, IonItem, IonLabel, IonImg,
+    IonList, IonListHeader, IonMenu, IonMenuToggle, IonRouterOutlet, IonSplitPane,
   },
-  {
-    title: 'Purchase Order',
-    url: '/Main/Purchase Order',
-    iosIcon: cloudy,
-    mdIcon: cloudy,
-    filename: 'prompt_po.txt',
+  data(){
+    return{
+      selectedIndex: -1,
+      ssgLogo: SsgLogo, mayaLogo: MayaLogo,
+      statusBar: StatusBar,
+      appPages: [
+        {
+            title: 'Bill of Material',
+            url: '/Main/Bill of Material',
+            iosIcon: cloudy,
+            mdIcon: cloudy,    
+            filename: 'prompt_bom.txt',
+          },
+          {
+            title: 'Purchase Order',
+            url: '/Main/Purchase Order',
+            iosIcon: cloudy,
+            mdIcon: cloudy,
+            filename: 'prompt_po.txt',
+          },
+          {
+            title: 'General Query',
+            url: '/Main/General Query',
+            iosIcon: chatbubbles,  // Changed icon
+            mdIcon: chatbubbles,
+            filename: 'prompt_query.txt'     // Changed icon
+          },
+        
+        ]
+    }
   },
-  {
-    title: 'General Query',
-    url: '/Main/General Query',
-    iosIcon: chatbubbles,  // Changed icon
-    mdIcon: chatbubbles,
-    filename: 'prompt_query.txt'     // Changed icon
+  created(){
+    try{
+      this.statusBar.setBackgroundColor({ color: '5c9eda' });
+      this.statusBar.setOverlaysWebView({ overlay: true });
+    } catch(e){
+      //
+    }
+    
+    App.addListener("backButton", () => {
+      if (window.location.pathname === "/Main/MAYA")
+        App.exitApp();
+      history.back();
+    });
+    
+    const path = window.location.pathname.split('Main/')[1];
+    if (path !== undefined) {
+      this.selectedIndex = this.appPages.findIndex((page) => page.title.toLowerCase() === path.toLowerCase());
+    }
   },
- 
-];
- 
-const path = window.location.pathname.split('Main/')[1];
-if (path !== undefined) {
-  selectedIndex.value = appPages.findIndex((page) => page.title.toLowerCase() === path.toLowerCase());
+  methods:{
+    handleMenuClick(index) {
+      this.selectedIndex = index;
+      const selectedPage = this.appPages[index];
+      sessionStorage.setItem('filename', selectedPage.filename);
+    }
+  }
 }
-function handleMenuClick(index: number) {
-  selectedIndex.value = index;
-  const selectedPage = appPages[index];
-  sessionStorage.setItem('filename', selectedPage.filename);
-}
- 
 </script>
  
 <style scoped>

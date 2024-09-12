@@ -4,7 +4,7 @@
       <ion-menu content-id="main-content" type="overlay">
         <ion-content>
           <br/>
-          <ion-list-header router-link="/Main/MAYA"><ion-img :src="mayaLogo" alt="Maya" style="max-width:50px; margin-top:3px;"/> &nbsp; <h2>MAYA</h2></ion-list-header>
+          <ion-list-header router-link="/Main/MAYA"><ion-img :src="mayaLogo" alt="Maya" style="max-width:35px; margin-top:3px;"/> &nbsp; <h2>MAYA</h2></ion-list-header>
           <br/>
           <ion-list id="inbox-list">
  
@@ -249,6 +249,7 @@ ion-img.menu-maya-logo {
   width: 40px;
   height: 60px;
 }
+
  
 </style>
 has context menu

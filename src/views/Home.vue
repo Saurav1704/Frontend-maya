@@ -5,10 +5,6 @@
         <ion-buttons slot="start">
           <ion-menu-button></ion-menu-button>
         </ion-buttons>
-        <ion-title>
-          <img src="@/assets/maya-logo.png" alt="Maya Logo" class="logo" @click="redirectToHome" />
-          Maya
-        </ion-title>
       </ion-toolbar>
     </ion-header>
  

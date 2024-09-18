@@ -3,37 +3,31 @@
     <ion-split-pane content-id="main-content">
       <ion-menu content-id="main-content" type="overlay">
         <ion-content>
+          <br />
+          <ion-list-header router-link="/Main/MAYA" @click="closeSplitPane">
+            <ion-img :src="mayaLogo" alt="Maya" style="max-width:35px; margin-top:3px;" />
+            &nbsp;
+            <h2>MAYA</h2>
+          </ion-list-header>
+          <br />
           <ion-list id="inbox-list">
-            <ion-list-header>MAYA</ion-list-header>
-            <ion-note>Maya123@soprasteria.com</ion-note>
-
             <ion-menu-toggle :auto-hide="false" v-for="(p, i) in appPages" :key="i">
-              <ion-item @click="selectedIndex = i" router-direction="root" :router-link="p.url" lines="none" :detail="false" class="hydrated" :class="{ selected: selectedIndex === i }">
-                <ion-icon aria-hidden="true" slot="start" :ios="p.iosIcon" :md="p.mdIcon"></ion-icon>
+              <ion-item @click="handleMenuClick(i)" router-direction="root" :router-link="p.url" lines="none"
+                :detail="false" class="hydrated" :class="{ selected: selectedIndex === i }">
+                <ion-icon slot="start" :ios="p.iosIcon" :md="p.mdIcon"></ion-icon>
                 <ion-label>{{ p.title }}</ion-label>
               </ion-item>
             </ion-menu-toggle>
           </ion-list>
-
-          <ion-img src="@/assets/sopra-steria.png" class="menu-logo"></ion-img>
-
-          <!-- <ion-list id="labels-list">
-            <ion-list-header>Labels</ion-list-header>
-
-            <ion-item v-for="(label, index) in labels" lines="none" :key="index">
-              <ion-icon aria-hidden="true" slot="start" :ios="bookmarkOutline" :md="bookmarkSharp"></ion-icon>
-              <ion-label>{{ label }}</ion-label>
-            </ion-item>
-          </ion-list> -->
+          <ion-img :src="ssgLogo" alt="Sopra Steria" class="menu-logo"></ion-img>
         </ion-content>
       </ion-menu>
       <ion-router-outlet id="main-content"></ion-router-outlet>
-      
     </ion-split-pane>
   </ion-app>
 </template>
 
-<script setup lang="ts">
+<script>
 import {
   IonApp,
   IonContent,
@@ -45,70 +39,114 @@ import {
   IonListHeader,
   IonMenu,
   IonMenuToggle,
-  IonNote,
   IonRouterOutlet,
   IonSplitPane,
-
 } from '@ionic/vue';
-import { ref } from 'vue';
-import {
-  archiveOutline,
-  archiveSharp,
-  bookmarkOutline,
-  bookmarkSharp,
-  heartOutline,
-  heartSharp,
-  mailOutline,
-  mailSharp,
-  paperPlaneOutline,
-  paperPlaneSharp,
-  trashOutline,
-  trashSharp,
-  warningOutline,
-  warningSharp,
-  constructOutline,      // Added for Bill of Material
-  constructSharp,        // Added for Bill of Material
-  documentTextOutline,   // Added for Purchase Order
-  documentTextSharp,     // Added for Purchase Order
-  serverOutline,         // Added for General Database
-  serverSharp,           // Added for General Database
-} from 'ionicons/icons';
+import { menuController } from '@ionic/vue';
+import { StatusBar } from '@capacitor/status-bar';
+import { Capacitor } from '@capacitor/core';
+import SsgLogo from '@/assets/sopra-steria.png';
+import MayaLogo from '@/assets/maya-logo.png';
+import BackgroundImage from '@/assets/background-image.jpg';
+import { App } from '@capacitor/app';
+import { chatbubbles, cloudy, codeWorkingOutline } from 'ionicons/icons';
 
-
-const selectedIndex = ref(0);
-const appPages = [
-{
-    title: 'Bill of Material',
-    url: '/folder/Inbox',
-    iosIcon: constructOutline,  // Changed icon
-    mdIcon: constructSharp,     // Changed icon
+export default {
+  components: {
+    IonApp,
+    IonContent,
+    IonIcon,
+    IonItem,
+    IonLabel,
+    IonImg,
+    IonList,
+    IonListHeader,
+    IonMenu,
+    IonMenuToggle,
+    IonRouterOutlet,
+    IonSplitPane,
   },
-  {
-    title: 'Purchase Order',
-    url: '/folder/Outbox',
-    iosIcon: documentTextOutline, // Changed icon
-    mdIcon: documentTextSharp,    // Changed icon
+  data() {
+    return {
+      selectedIndex: -1,
+      ssgLogo: SsgLogo,
+      mayaLogo: MayaLogo,
+      statusBar: StatusBar,
+      appPages: [
+        {
+          title: 'Bill of Material',
+          url: '/Main/Bill of Material',
+          iosIcon: cloudy,
+          mdIcon: cloudy,
+          filename: 'prompt_bom.txt',
+        },
+        {
+          title: 'Purchase Order',
+          url: '/Main/Purchase Order',
+          iosIcon: cloudy,
+          mdIcon: cloudy,
+          filename: 'prompt_po.txt',
+        },
+        {
+          title: 'General Query',
+          url: '/Main/General Query',
+          iosIcon: chatbubbles,
+          mdIcon: chatbubbles,
+          filename: 'prompt_query.txt',
+        },
+      ],
+    };
   },
-  {
-    title: 'General Database',
-    url: '/folder/Favorites',
-    iosIcon: serverOutline,  // Changed icon
-    mdIcon: serverSharp,     // Changed icon
+  created() {
+    if (Capacitor.isNativePlatform()) {
+      // The code will only run on native platforms (iOS or Android)
+      try {
+        StatusBar.setBackgroundColor({ color: '#5c9eda' });
+        StatusBar.setOverlaysWebView({ overlay: false });
+      } catch (e) {
+        console.error('Error setting the status bar:', e);
+      }
+    } else {
+      console.log("StatusBar plugin is not available on web.");
+    }
+
+    App.addListener('backButton', () => {
+      if (window.location.pathname === '/Main/MAYA') App.exitApp();
+      history.back();
+    });
+
+    const path = window.location.pathname.split('Main/')[1];
+    if (path !== undefined) {
+      this.selectedIndex = this.appPages.findIndex((page) => page.title.toLowerCase() === path.toLowerCase());
+    }
   },
-  
-];
-// const labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
-
-
-const path = window.location.pathname.split('folder/')[1];
-if (path !== undefined) {
-  selectedIndex.value = appPages.findIndex((page) => page.title.toLowerCase() === path.toLowerCase());
-}
+  methods: {
+    async closeSplitPane() {
+      await menuController.close();
+      this.handleMenuClick(-1);
+    },
+    handleMenuClick(index) {
+      if (index === -1) {
+        this.selectedIndex = '';
+      } else {
+        this.selectedIndex = index;
+        const selectedPage = this.appPages[index];
+        sessionStorage.setItem('filename', selectedPage.filename);
+        sessionStorage.setItem('title', selectedPage.title);
+      }
+    },
+  },
+};
 </script>
 
 <style scoped>
 ion-menu ion-content {
-  --background: var(--ion-item-background, var(--ion-background-color, #fff));
+  --background: none;
+  background-image: url('@/assets/background-image.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  --padding-bottom: 20px;
 }
 
 ion-menu.md ion-content {
@@ -138,17 +176,14 @@ ion-menu.md ion-list#inbox-list {
 ion-menu.md ion-list#inbox-list ion-list-header {
   font-size: 22px;
   font-weight: 600;
-
+  margin-left: 50px;
   min-height: 20px;
 }
 
 ion-menu.md ion-list#labels-list ion-list-header {
   font-size: 16px;
-
   margin-bottom: 18px;
-
   color: #757575;
-
   min-height: 26px;
 }
 
@@ -191,6 +226,7 @@ ion-menu.ios ion-item {
   --padding-start: 16px;
   --padding-end: 16px;
   --min-height: 50px;
+  margin-left: 50px;
 }
 
 ion-menu.ios ion-item.selected ion-icon {
@@ -219,13 +255,13 @@ ion-menu.ios ion-note {
 ion-note {
   display: inline-block;
   font-size: 16px;
-
   color: var(--ion-color-medium-shade);
 }
 
 ion-item.selected {
   --color: var(--ion-color-primary);
 }
+
 ion-img.menu-logo {
   position: absolute;
   bottom: 10px;
@@ -234,4 +270,11 @@ ion-img.menu-logo {
   height: auto;
 }
 
+ion-img.menu-maya-logo {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 40px;
+  height: 60px;
+}
 </style>

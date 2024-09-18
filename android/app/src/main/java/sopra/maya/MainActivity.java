@@ -1,4 +1,4 @@
-package io.ionic.starter;
+package sopra.maya;
 
 import com.getcapacitor.BridgeActivity;
 

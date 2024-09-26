@@ -4,7 +4,7 @@
       <ion-menu content-id="main-content" type="overlay">
         <ion-content>
           <br />
-          <ion-list-header router-link="/Main/MAYA">
+          <ion-list-header router-link="/Main/MAYA" @click="closeSplitPane">
             <ion-img :src="mayaLogo" alt="Maya" style="max-width:35px; margin-top:3px;" />
             &nbsp;
             <h2>MAYA</h2>
@@ -12,15 +12,8 @@
           <br />
           <ion-list id="inbox-list">
             <ion-menu-toggle :auto-hide="false" v-for="(p, i) in appPages" :key="i">
-              <ion-item
-                @click="handleMenuClick(i)"
-                router-direction="root"
-                :router-link="p.url"
-                lines="none"
-                :detail="false"
-                class="hydrated"
-                :class="{ selected: selectedIndex === i }"
-              >
+              <ion-item @click="handleMenuClick(i)" router-direction="root" :router-link="p.url" lines="none"
+                :detail="false" class="hydrated" :class="{ selected: selectedIndex === i }">
                 <ion-icon aria-hidden="true" slot="start" :ios="p.iosIcon" :md="p.mdIcon"></ion-icon>
                 <ion-label>{{ p.title }}</ion-label>
               </ion-item>
@@ -49,12 +42,14 @@ import {
   IonRouterOutlet,
   IonSplitPane,
 } from '@ionic/vue';
+import { menuController } from '@ionic/vue';
 import { StatusBar } from '@capacitor/status-bar';
+import { Capacitor } from '@capacitor/core';
 import SsgLogo from '@/assets/sopra-steria.png';
 import MayaLogo from '@/assets/maya-logo.png';
-import BackgroundImage from '@/assets/background-image.jpg'; // Import the background image
+import BackgroundImage from '@/assets/background-image.jpg';
 import { App } from '@capacitor/app';
-import { chatbubbles, cloudy } from 'ionicons/icons';
+import { chatbubbles, cloudy, codeWorkingOutline } from 'ionicons/icons';
 
 export default {
   components: {
@@ -103,11 +98,16 @@ export default {
     };
   },
   created() {
-    try {
-      this.statusBar.setBackgroundColor({ color: '5c9eda' });
-      this.statusBar.setOverlaysWebView({ overlay: true });
-    } catch (e) {
-      //
+    if (Capacitor.isNativePlatform()) {
+      // The code will only run on native platforms (iOS or Android)
+      try {
+        StatusBar.setBackgroundColor({ color: '#5c9eda' });
+        StatusBar.setOverlaysWebView({ overlay: false });
+      } catch (e) {
+        console.error('Error setting the status bar:', e);
+      }
+    } else {
+      console.log("StatusBar plugin is not available on web.");
     }
 
     App.addListener('backButton', () => {
@@ -121,10 +121,19 @@ export default {
     }
   },
   methods: {
+    async closeSplitPane() {
+      await menuController.close();
+      this.handleMenuClick(-1);
+    },
     handleMenuClick(index) {
-      this.selectedIndex = index;
-      const selectedPage = this.appPages[index];
-      sessionStorage.setItem('filename', selectedPage.filename);
+      if (index === -1) {
+        this.selectedIndex = '';
+      } else {
+        this.selectedIndex = index;
+        const selectedPage = this.appPages[index];
+        sessionStorage.setItem('filename', selectedPage.filename);
+        sessionStorage.setItem('title', selectedPage.title);
+      }
     },
   },
 };
@@ -132,12 +141,12 @@ export default {
 
 <style scoped>
 ion-menu ion-content {
-  --background: none; /* Remove any default background */
-  background-image: url('@/assets/background-image.jpg'); /* Set the background image */
-  background-size: cover; /* Cover the entire content area */
-  background-position: center; /* Center the background */
-  background-repeat: no-repeat; /* Prevent repeating the image */
-  --padding-bottom: 20px; /* Retain existing padding */
+  --background: none;
+  background-image: url('@/assets/background-image.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  --padding-bottom: 20px;
 }
 
 ion-menu.md ion-content {

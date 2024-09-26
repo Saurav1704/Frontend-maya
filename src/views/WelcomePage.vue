@@ -9,7 +9,7 @@
 
       <div class="content-container">
         <div class="image-container">
-          <img src="@/assets/welcome-icon.png" alt="Welcome Logo" class="centered-logo" />
+          <img src="@/assets/welcome_icon.png" alt="Welcome Logo" class="centered-logo" />
         </div>
         <div class="welcome-message">
           <h2 class="animate-text">MAYA</h2>
@@ -85,8 +85,8 @@ ion-content::before {
   }
 }
 ion-content .inner-scroll {
-  background-color: #f5f5f5; /* Example: change background */
-  padding: 20px; /* Example: add padding */
+  background-color: #f5f5f5; 
+  padding: 20px; 
 }
 
 /* Content Container */
@@ -100,9 +100,7 @@ ion-content .inner-scroll {
   text-align: center;
   /* padding: 20px; */
   z-index: 10;
-  /* Ensure content is above animations */
   position: relative;
-  /* Ensures z-index works */
 }
 
 /* Image Container */
@@ -112,16 +110,16 @@ ion-content .inner-scroll {
 }
 
 .centered-logo {
-  width: 120px;
-  height: 120px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  transition: transform 0.5s ease, box-shadow 0.5s ease;
+  width: 170px;
+  height: 140px;
+  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); */
+  /* transition: transform 0.5s ease, box-shadow 0.5s ease; */
 }
 
-.centered-logo:hover {
+/* .centered-logo:hover {
   transform: scale(1.1);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-}
+} */
 
 /* Welcome Message Styles */
 /* .welcome-message {

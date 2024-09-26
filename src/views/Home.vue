@@ -170,7 +170,7 @@ export default {
 
         if (data.greet) {
           this.messages.push({ role: 'assistant', content: data.greet });
-        } else if (data.data === 0) {
+        } else if (data.data.length === 0) {
           this.messages.push({ role: 'assistant', content: 'No data found.' });
         } else if (data.columns && data.data) {
           const columns = data.columns.map(column => ({ prop: column, name: column }));

@@ -2,14 +2,14 @@
   <ion-page>
     <!-- <ion-header :translucent="true"> -->
     <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
-    </ion-buttons>
-    <ion-title>{{ title }}</ion-title>
-    <!-- <ion-title> -->
-    <!-- <img src="@/assets/maya-logo.png" alt="Maya Logo" class="logo" @click="redirectToHome" /> -->
-    <!-- Maya -->
-    <!-- </ion-title> -->
+      <ion-buttons slot="start">
+        <ion-menu-button></ion-menu-button>
+      </ion-buttons>
+      <ion-title>{{ title }}</ion-title>
+      <!-- <ion-title> -->
+      <!-- <img src="@/assets/maya-logo.png" alt="Maya Logo" class="logo" @click="redirectToHome" /> -->
+      <!-- Maya -->
+      <!-- </ion-title> -->
     </ion-toolbar>
     <!-- </ion-header> -->
 
@@ -128,6 +128,7 @@ export default {
         console.log('Speech Recognition not supported in this browser.');
       }
     }
+    this.welcomeMessage();
   },
 
   methods: {
@@ -137,9 +138,9 @@ export default {
 
       if (!question) {
         // this.messages.push({ role: 'assistant', content: 'Question is empty.' });
-        this.showToast = true;  
-        this.showError = true;  
-        
+        this.showToast = true;
+        this.showError = true;
+
         setTimeout(() => {
           this.showError = false;
         }, 2000);
@@ -188,6 +189,17 @@ export default {
         this.messages = this.messages.filter(msg => !msg.isLoading);
         this.messages.push({ role: 'assistant', content: `Error: ${error.message}` });
       });
+    },
+
+    welcomeMessage() {
+      const title = this.title || 'MAYA'; // Default to 'MAYA' if title is not set
+      const welcomeContent = `Welcome to ${title}. How can I assist you today?`;
+
+      // Check if the last message is already a welcome message to avoid duplicates
+      const lastMessage = this.messages[this.messages.length - 1];
+      if (!lastMessage || lastMessage.content !== welcomeContent) {
+        this.messages.push({ role: 'assistant', content: welcomeContent });
+      }
     },
 
     async startVoiceRecognition() {

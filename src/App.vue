@@ -5,7 +5,7 @@
         <ion-content>
           <br />
           <ion-list-header router-link="/Main/MAYA" @click="closeSplitPane">
-            <ion-img :src="mayaLogo" alt="Maya" style="max-width:35px; margin-top:3px;" />
+            <ion-img :src="mayaLogo" class="mayalogosvg" alt="Maya" style="max-width:35px; margin-top:3px; " />
             &nbsp;
             <h2>MAYA</h2>
           </ion-list-header>
@@ -46,10 +46,10 @@ import { menuController } from '@ionic/vue';
 import { StatusBar } from '@capacitor/status-bar';
 import { Capacitor } from '@capacitor/core';
 import SsgLogo from '@/assets/sopra-steria.png';
-import MayaLogo from '@/assets/maya-logo.png';
+import MayaLogo from '@/assets/maya-logo.svg';
 import BackgroundImage from '@/assets/background-image.jpg';
 import { App } from '@capacitor/app';
-import { chatbubbles, cloudy, codeWorkingOutline } from 'ionicons/icons';
+import { chatbubbles, cloudy, codeWorkingOutline,documentSharp, documentTextOutline, documentOutline } from 'ionicons/icons';
 
 export default {
   components: {
@@ -76,22 +76,22 @@ export default {
         {
           title: 'Bill of Material',
           url: '/Main/Bill of Material',
-          iosIcon: cloudy,
-          mdIcon: cloudy,
+          iosIcon: documentTextOutline,
+          mdIcon: documentTextOutline,
           filename: 'prompt_bom.txt',
         },
         {
           title: 'Purchase Order',
           url: '/Main/Purchase Order',
-          iosIcon: cloudy,
-          mdIcon: cloudy,
+          iosIcon: documentOutline,
+          mdIcon: documentOutline,
           filename: 'prompt_po.txt',
         },
         {
-          title: 'General Query',
+          title: 'Material Master',
           url: '/Main/General Query',
-          iosIcon: chatbubbles,
-          mdIcon: chatbubbles,
+          iosIcon: documentSharp,
+          mdIcon: documentSharp,
           filename: 'prompt_query.txt',
         },
       ],
@@ -276,5 +276,8 @@ ion-img.menu-maya-logo {
   left: 10px;
   width: 40px;
   height: 60px;
+}
+ion-img::part(image) {
+  border-radius: 40%;
 }
 </style>
